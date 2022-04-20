@@ -104,7 +104,7 @@ public class RatingsDao {
     		stringBuffer.append("'");
     	}
     	stringBuffer.append("  GROUP BY title_id )   B on A.title_id = B.title_id");
-    	if(!(averageRating != null)) {
+    	if((averageRating != null)) {
     		stringBuffer.append(" WHERE A.average_rating>= '");
     		stringBuffer.append(averageRating);
     		stringBuffer.append("'");
