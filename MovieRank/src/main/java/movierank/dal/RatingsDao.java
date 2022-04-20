@@ -39,7 +39,6 @@ public class RatingsDao {
             insertStmt.setInt(3, rating.getNumVotes());
             insertStmt.executeUpdate();
 
-            return rating;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -51,6 +50,7 @@ public class RatingsDao {
                 insertStmt.close();
             }
         }
+        return rating;
     }
 
     public List<Ratings> getRatingsByTitleId(String titleId) throws SQLException{
@@ -159,7 +159,6 @@ public class RatingsDao {
             updateStmt.executeUpdate();
             rating.setNumVotes(numVotes);
 
-            return rating;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -171,6 +170,7 @@ public class RatingsDao {
                 updateStmt.close();
             }
         }
+        return rating;
     }
 
     public Ratings delete(Ratings rating) throws SQLException{
@@ -186,7 +186,6 @@ public class RatingsDao {
             deleteStmt.setInt(3, rating.getNumVotes());
             deleteStmt.executeUpdate();
 
-            return null;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -198,5 +197,6 @@ public class RatingsDao {
                 deleteStmt.close();
             }
         }
+        return null;
     }
 }

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import movierank.model.*;
 import movierank.utils.ConnectionManager;
@@ -37,8 +39,6 @@ public class MoviesDao {
 			insertStmt.setInt(8, movie.getRuntime_minutes());
 			insertStmt.executeUpdate();
 			
-			return movie;
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -50,6 +50,8 @@ public class MoviesDao {
 				insertStmt.close();
 			}
 		}
+		
+		return movie;
 	}
 	
 	public Movies getMovieByTitleId(String title_id) throws SQLException {
@@ -57,6 +59,7 @@ public class MoviesDao {
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
+		Movies movie = null;
 		try {
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectMovies);
@@ -71,8 +74,7 @@ public class MoviesDao {
 				int startYear = results.getInt("start_year");
 				int endYear = results.getInt("end_year");
 				int runtimeMinutes = results.getInt("runtime_minutes");
-				Movies movie = new Movies(resultMovieId, primaryTitle, titleType, originalType, isAdult, startYear, endYear, runtimeMinutes);
-				return movie;
+				movie = new Movies(resultMovieId, primaryTitle, titleType, originalType, isAdult, startYear, endYear, runtimeMinutes);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -88,7 +90,90 @@ public class MoviesDao {
 				results.close();
 			}
 		}
-		return null;
+		return movie;
+	}
+	
+	public List<Movies> getMovieByTitleName(String title) throws SQLException {
+		String selectMovies = "SELECT title_id, primary_title, title_type, original_title, is_Adult, start_year, end_year, runtime_minutes FROM Movies WHERE primary_title like ?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		List<Movies> ret = new ArrayList<>();
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectMovies);
+			selectStmt.setString(1, "%" + title + "%");
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				String resultMovieId = results.getString("title_id");
+				String primaryTitle = results.getString("primary_title");
+				String titleType = results.getString("title_type");
+				String originalType = results.getString("original_title");
+				boolean isAdult = results.getBoolean("is_Adult");
+				int startYear = results.getInt("start_year");
+				int endYear = results.getInt("end_year");
+				int runtimeMinutes = results.getInt("runtime_minutes");
+				Movies movie = new Movies(resultMovieId, primaryTitle, titleType, originalType, isAdult, startYear, endYear, runtimeMinutes);
+				ret.add(movie);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return ret;
+	}
+	
+	public List<Movies> getMovieByPersonName(String person) throws SQLException {
+		String selectMovies = "SELECT movies.title_id, primary_title, title_type, original_title, is_Adult, start_year, end_year, runtime_minutes FROM movies\r\n"
+				+ "LEFT OUTER JOIN principals ON movies.title_id = principals.title_id\r\n"
+				+ "LEFT OUTER JOIN persons ON principals.name_id = persons.name_id\r\n"
+				+ "WHERE persons.name_ LIKE ?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		List<Movies> ret = new ArrayList<>();
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectMovies);
+			selectStmt.setString(1, "%" + person + "%");
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				String resultMovieId = results.getString("title_id");
+				String primaryTitle = results.getString("primary_title");
+				String titleType = results.getString("title_type");
+				String originalType = results.getString("original_title");
+				boolean isAdult = results.getBoolean("is_Adult");
+				int startYear = results.getInt("start_year");
+				int endYear = results.getInt("end_year");
+				int runtimeMinutes = results.getInt("runtime_minutes");
+				Movies movie = new Movies(resultMovieId, primaryTitle, titleType, originalType, isAdult, startYear, endYear, runtimeMinutes);
+				ret.add(movie);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return ret;
 	}
 	
 	public Movies getMovieByTitleId(String title_id,String year) throws SQLException {
@@ -100,6 +185,7 @@ public class MoviesDao {
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
+		Movies movie = null;
 		try {
 		
 			connection = connectionManager.getConnection();
@@ -116,8 +202,7 @@ public class MoviesDao {
 				int startYear = results.getInt("start_year");
 				int endYear = results.getInt("end_year");
 				int runtimeMinutes = results.getInt("runtime_minutes");
-				Movies movie = new Movies(resultMovieId, primaryTitle, titleType, originalType, isAdult, startYear, endYear, runtimeMinutes);
-				return movie;
+				movie = new Movies(resultMovieId, primaryTitle, titleType, originalType, isAdult, startYear, endYear, runtimeMinutes);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -133,7 +218,7 @@ public class MoviesDao {
 				results.close();
 			}
 		}
-		return null;
+		return movie;
 	}
 	public Movies updateMovieEndyear(Movies movie, int newEndYear) throws SQLException {
 		String updateMovie = "UPDATE Movies SET end_year=? WHERE title_id=?;";
@@ -147,7 +232,6 @@ public class MoviesDao {
 			updateStmt.executeUpdate();
 			
 			movie.setEnd_year(newEndYear);
-			return movie;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -159,6 +243,7 @@ public class MoviesDao {
 				updateStmt.close();
 			}
 		}
+		return movie;
 	}
 	
 	
@@ -171,7 +256,6 @@ public class MoviesDao {
 			deleteStmt = connection.prepareStatement(deleteMovie);
 			deleteStmt.setString(1, movie.getTitle_id());
 			deleteStmt.executeUpdate();
-			return null;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -183,5 +267,6 @@ public class MoviesDao {
 				deleteStmt.close();
 			}
 		}
+		return null;
 	}
 }

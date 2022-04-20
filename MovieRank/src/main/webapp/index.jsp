@@ -27,101 +27,123 @@
     </script>
 </head>
 <body>
-<form action="movies" method="get">
-    <h1>Search for Movies above Rating</h1>
-    <p>
-        <label for="avgRating">Rating</label>
-        <input id="avgRating" name="avgRating" value="${fn:escapeXml(param.avgRating)}">
-         Year：<input type="text" name="year" value="${fn:escapeXml(param.year)}"></input>
-    	 Genre：<input type="text" name="type" value="${fn:escapeXml(param.type)}"></input>
-    </p>
-    <p>
-        <input type="submit">
-        <br/><br/><br/>
-        <span id="successMessage"><b>${Message.Success}</b></span>
-    </p>
-</form>
-<form action="movies" method="post">
-    <div>
-        <input type="button" id="createMovieBtn" value="Create Movie" onclick="createMovie()">
-        <table border="1" id = "createMovieTable" style="display: none">
-            <tr>
-                <th>TitleId</th>
-                <th>Primary Title</th>
-                <th>Title Type</th>
-                <th>Original Title</th>
-                <th>IsAdult</th>
-                <th>Start Year</th>
-                <th>End Year</th>
-                <th>Run Time Minutes</th>
-            </tr>
-            <tr>
-                <td>
-                    <input id="title_id" name="title_id" value="${fn:escapeXml(param.title_id)}">
-                </td>
-                <td>
-                    <input id="primary_title" name="primary_title" value="${fn:escapeXml(param.primary_title)}">
-                </td>
-                <td>
-                    <input id="title_type" name="title_type" value="${fn:escapeXml(param.title_type)}">
-                </td>
-                <td>
-                    <input id="original_title" name="original_title" value="${fn:escapeXml(param.original_title)}">
-                </td>
-                <td>
-                    <input type="checkbox" id="is_Adult" name="is_Adult" value="${fn:escapeXml(param.is_Adult)}">
-                </td>
-                <td>
-                    <input id="start_year" name="start_year" value="${fn:escapeXml(param.start_year)}">
-                </td>
-                <td>
-                    <input id="end_year" name="end_year" value="${fn:escapeXml(param.end_year)}">
-                </td>
-                <td>
-                    <input id="runtime_minutes" name="runtime_minutes" value="${fn:escapeXml(param.runtime_minutes)}">
-                </td>
-                <td>
-                    <input type="submit" value = "Create!">
-                    <input type="hidden" name = "create" value="true">
-                </td>
-            </tr>
-        </table>
-        <span id="createSuccess"><b>${create}</b></span>
-    </div>
-</form>
-<%--<style>--%>
-<%--    .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }--%>
-<%--</style>--%>
-
-<%--<iframe name="hiddenFrame" class="hide"></iframe>--%>
-<form action="reviews" method="post">
-    <div>
-        <input type="button" id="createReviewBtn" value="Add Review" onclick="createReview()">
-        <table border="1" id = "createReviewTable" style="display: none">
-            <tr>
-                <th>TitleId</th>
-                <th>Average Rating</th>
-                <th>Number Of Votes</th>
-            </tr>
-            <tr>
-                <td>
-                    <input id="title_id_for_review" name="title_id" value="${fn:escapeXml(param.title_id)}">
-                </td>
-                <td>
-                    <input id="avgRatingForReview" name="average_rating" value="${fn:escapeXml(param.average_rating)}">
-                </td>
-                <td>
-                    <input id="numOfVotes" name="num_votes" value="${fn:escapeXml(param.num_votes)}">
-                </td>
-                <td>
-                    <input type="submit" value = "Create!">
-                    <input type="hidden" name = "create" value="true">
-                    <input type="hidden" id = "prevRating" name = "prevRating" value="${fn:escapeXml(param.avgRating)}">
-                </td>
-            </tr>
-        </table>
-    </div>
-</form>
+	<form action="movies" method="get">
+	    <h2>Search for Movies by Rating/Year/Genre</h2>
+	    <p>
+	        <label for="avgRating">Rating</label>
+	        <input id="avgRating" name="avgRating" value="${fn:escapeXml(param.avgRating)}"></input>
+	         Year：<input type="text" name="year" value="${fn:escapeXml(param.year)}"></input>
+	    	 Genre：<input type="text" name="type" value="${fn:escapeXml(param.type)}"></input>
+	    </p>
+	    <p>
+	        <input type="submit">
+	    </p>
+	</form>
+	<form action="movies" method="get">
+	    <h2>Search for Movies by Title</h2>
+	    <p>
+	        <label for="title">Title</label>
+	        <input id="title" name="title" value="${fn:escapeXml(param.title)}"></input>
+	    </p>
+	    <p>
+	        <input type="submit">
+	    </p>
+	</form>
+	<form action="movies" method="get">
+	    <h2>Search for Movies by Person's Name</h2>
+	    <p>
+	        <label for="person">Person's Name</label>
+	        <input id="person" name="person" value="${fn:escapeXml(param.person)}"></input>
+	    </p>
+	    <p>
+	        <input type="submit">
+	        <br/><br/><br/>
+	        <span id="successMessage"><b>${Message.Success}</b></span>
+	    </p>
+	</form>
+	<form action="movies" method="post">
+	 	<h2>Add new movie</h2>
+	    <div>
+	        <input type="button" id="createMovieBtn" value="Create Movie" onclick="createMovie()">
+	        <table border="1" id = "createMovieTable" style="display: none">
+	            <tr>
+	                <th>TitleId</th>
+	                <th>Primary Title</th>
+	                <th>Title Type</th>
+	                <th>Original Title</th>
+	                <th>IsAdult</th>
+	                <th>Start Year</th>
+	                <th>End Year</th>
+	                <th>Run Time Minutes</th>
+	            </tr>
+	            <tr>
+	                <td>
+	                    <input id="title_id" name="title_id" value="${fn:escapeXml(param.title_id)}">
+	                </td>
+	                <td>
+	                    <input id="primary_title" name="primary_title" value="${fn:escapeXml(param.primary_title)}">
+	                </td>
+	                <td>
+	                    <input id="title_type" name="title_type" value="${fn:escapeXml(param.title_type)}">
+	                </td>
+	                <td>
+	                    <input id="original_title" name="original_title" value="${fn:escapeXml(param.original_title)}">
+	                </td>
+	                <td>
+	                    <input type="checkbox" id="is_Adult" name="is_Adult" value="${fn:escapeXml(param.is_Adult)}">
+	                </td>
+	                <td>
+	                    <input id="start_year" name="start_year" value="${fn:escapeXml(param.start_year)}">
+	                </td>
+	                <td>
+	                    <input id="end_year" name="end_year" value="${fn:escapeXml(param.end_year)}">
+	                </td>
+	                <td>
+	                    <input id="runtime_minutes" name="runtime_minutes" value="${fn:escapeXml(param.runtime_minutes)}">
+	                </td>
+	                <td>
+	                    <input type="submit" value = "Create!">
+	                    <input type="hidden" name = "create" value="true">
+	                </td>
+	            </tr>
+	        </table>
+	        <span id="createSuccess"><b>${create}</b></span>
+	    </div>
+	</form>
+	<%--<style>--%>
+	<%--    .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }--%>
+	<%--</style>--%>
+	
+	<%--<iframe name="hiddenFrame" class="hide"></iframe>--%>
+	<form action="reviews" method="post">
+		<h2>Add new Review</h2>
+	    <div>
+	        <input type="button" id="createReviewBtn" value="Add Review" onclick="createReview()">
+	        <table border="1" id = "createReviewTable" style="display: none">
+	            <tr>
+	                <th>TitleId</th>
+	                <th>Average Rating</th>
+	                <th>Number Of Votes</th>
+	            </tr>
+	            <tr>
+	                <td>
+	                    <input id="title_id_for_review" name="title_id" value="${fn:escapeXml(param.title_id)}">
+	                </td>
+	                <td>
+	                    <input id="avgRatingForReview" name="average_rating" value="${fn:escapeXml(param.average_rating)}">
+	                </td>
+	                <td>
+	                    <input id="numOfVotes" name="num_votes" value="${fn:escapeXml(param.num_votes)}">
+	                </td>
+	                <td>
+	                    <input type="submit" value = "Create!">
+	                    <input type="hidden" name = "create" value="true">
+	                    <input type="hidden" id = "prevRating" name = "prevRating" value="${fn:escapeXml(param.avgRating)}">
+	                </td>
+	            </tr>
+	        </table>
+	    </div>
+	</form>
     <h1>Matching Movies</h1>
     <table border="1">
         <tr>

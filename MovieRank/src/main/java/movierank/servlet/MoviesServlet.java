@@ -51,9 +51,37 @@ public class MoviesServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        messages.put(Constants.SUCCESS, "Displaying result for " + avgRating);
-        messages.put("year", "Displaying result for " + year);
-        messages.put("type", "Displaying result for " + type);
+        messages.put(Constants.SUCCESS, "Displaying result for rating: " + avgRating + ", year: " + year + ", genre: " + type);
+        req.setAttribute(Constants.MOVIE, movies);
+        req.getRequestDispatcher(Constants.INDEX_PAGE).forward(req, resp);
+    }
+    
+    private void doGetByTitle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Map<String, String> messages = new HashMap<String, String>();
+        req.setAttribute(Constants.MESSAGE, messages);
+        List<Movies> movies = new ArrayList<>();
+        String title = req.getParameter(Constants.TITLE);
+        try {
+        	movies = moviesDao.getMovieByTitleName(title);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        messages.put(Constants.SUCCESS, "Displaying result for name containing: " + title);
+        req.setAttribute(Constants.MOVIE, movies);
+        req.getRequestDispatcher(Constants.INDEX_PAGE).forward(req, resp);
+    }
+    
+    private void doGetByPerson(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Map<String, String> messages = new HashMap<String, String>();
+        req.setAttribute(Constants.MESSAGE, messages);
+        List<Movies> movies = new ArrayList<>();
+        String person = req.getParameter(Constants.PERSON);
+        try {
+        	movies = moviesDao.getMovieByPersonName(person);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        messages.put(Constants.SUCCESS, "Displaying result for movies related to person: " + person);
         req.setAttribute(Constants.MOVIE, movies);
         req.getRequestDispatcher(Constants.INDEX_PAGE).forward(req, resp);
     }
@@ -62,11 +90,21 @@ public class MoviesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doGet(req, resp);
         String avgRating = req.getParameter(Constants.AVG_RATING);
-        if(avgRating != null)  {
+        String title = req.getParameter(Constants.TITLE);
+        String person = req.getParameter(Constants.PERSON);
+        if(avgRating != null && avgRating.length() > 0)  {
             prevRating = avgRating;
             prevReq = req;
             prevResp = resp;
             doGetOnAverageRating(req, resp, avgRating);
+        } else if (title != null && title.length() > 0) {
+            prevReq = req;
+            prevResp = resp;
+            doGetByTitle(req, resp);
+        } else if (person != null && person.length() > 0) {
+            prevReq = req;
+            prevResp = resp;
+            doGetByPerson(req, resp);
         }
     }
 
@@ -90,7 +128,7 @@ public class MoviesServlet extends HttpServlet {
             e.printStackTrace();
         }
         resp.setStatus(HttpServletResponse.SC_ACCEPTED);
-        doGetOnAverageRating(prevReq, prevResp, prevRating);
+        doGet(prevReq, prevResp);
     }
 
     private void doPostOnDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -109,7 +147,7 @@ public class MoviesServlet extends HttpServlet {
             }
             resp.setStatus(HttpServletResponse.SC_ACCEPTED);
         }else resp.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
-        doGetOnAverageRating(prevReq, prevResp, prevRating);
+        doGet(prevReq, prevResp);
     }
 
     private void doPostOnCreate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -132,7 +170,7 @@ public class MoviesServlet extends HttpServlet {
         resp.setStatus(HttpServletResponse.SC_CREATED);
         System.out.println(Constants.CREATE_SUCCESS);
         req.setAttribute(Constants.CREATE, Constants.CREATE + Constants.SUCC + title_id);
-        doGetOnAverageRating(prevReq, prevResp, prevRating);
+        doGet(prevReq, prevResp);
     }
 
     @Override
