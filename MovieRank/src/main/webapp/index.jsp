@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: jeromy
-  Date: 3/29/22
-  Time: 8:03 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -39,6 +32,8 @@
     <p>
         <label for="avgRating">Rating</label>
         <input id="avgRating" name="avgRating" value="${fn:escapeXml(param.avgRating)}">
+         Year：<input type="text" name="year" value="${fn:escapeXml(param.year)}"></input>
+    	 Genre：<input type="text" name="type" value="${fn:escapeXml(param.type)}"></input>
     </p>
     <p>
         <input type="submit">

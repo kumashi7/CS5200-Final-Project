@@ -91,6 +91,50 @@ public class MoviesDao {
 		return null;
 	}
 	
+	public Movies getMovieByTitleId(String title_id,String year) throws SQLException {
+		String selectMovies = "SELECT title_id, primary_title, title_type, original_title, is_Adult, start_year, end_year, runtime_minutes FROM Movies WHERE title_id=?";
+		if(!("".equals(year)|| null==year)) {
+			selectMovies+="and start_year = "+year;
+		}
+		selectMovies+=";";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+		
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectMovies);
+			selectStmt.setString(1, title_id);
+			results = selectStmt.executeQuery();
+			if(results.next()) {
+				String resultMovieId = results.getString("title_id");
+	
+				String primaryTitle = results.getString("primary_title");
+				String titleType = results.getString("title_type");
+				String originalType = results.getString("original_title");
+				boolean isAdult = results.getBoolean("is_Adult");
+				int startYear = results.getInt("start_year");
+				int endYear = results.getInt("end_year");
+				int runtimeMinutes = results.getInt("runtime_minutes");
+				Movies movie = new Movies(resultMovieId, primaryTitle, titleType, originalType, isAdult, startYear, endYear, runtimeMinutes);
+				return movie;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
+	}
 	public Movies updateMovieEndyear(Movies movie, int newEndYear) throws SQLException {
 		String updateMovie = "UPDATE Movies SET end_year=? WHERE title_id=?;";
 		Connection connection = null;

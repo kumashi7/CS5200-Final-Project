@@ -36,12 +36,13 @@ public class ConnectionManager {
 	// change username
 	private final String user = "root";
 	// change password
-	private final String password = "cs5200";
+	private final String password = "111111";
 	private final String hostName = "localhost";
 	// this may should be changed 
 	private final int port= 3306;
 	// this may should be changed
-	private final String schema = "MovieRank";
+	//private final String schema = "MovieRank";
+	private final String schema = "movierank";
 	private final String timezone = "UTC";
 
 	/** Get the connection to the database instance. */

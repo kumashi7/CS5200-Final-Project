@@ -36,16 +36,24 @@ public class MoviesServlet extends HttpServlet {
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute(Constants.MESSAGE, messages);
         List<Movies> movies = new ArrayList<>();
+        String year= req.getParameter("year");
+        String type=req.getParameter("type");
         try {
-            List<Ratings> ratings = ratingsDao.getRatingsByAverageRating(Double.valueOf(avgRating));
+        	if(avgRating.equals("")||avgRating==null) {
+        		avgRating=null;
+        	}
+            List<Ratings> ratings = ratingsDao.getRatingsByAverageRating(avgRating,type,year);
             for(Ratings rating : ratings) {
-                Movies movie = moviesDao.getMovieByTitleId(rating.getTitleId());
+            	
+                Movies movie = moviesDao.getMovieByTitleId(rating.getTitleId(),year);
                 if(movie!=null) movies.add(movie);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         messages.put(Constants.SUCCESS, "Displaying result for " + avgRating);
+        messages.put("year", "Displaying result for " + year);
+        messages.put("type", "Displaying result for " + type);
         req.setAttribute(Constants.MOVIE, movies);
         req.getRequestDispatcher(Constants.INDEX_PAGE).forward(req, resp);
     }
@@ -67,7 +75,7 @@ public class MoviesServlet extends HttpServlet {
         String title_id = req.getParameter(Constants.TITLE_ID);
         Movies movie = null;
         try {
-            movie = moviesDao.getMovieByTitleId(title_id);
+            movie = moviesDao.getMovieByTitleId(title_id,"");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -89,7 +97,7 @@ public class MoviesServlet extends HttpServlet {
         String title_id = req.getParameter(Constants.TITLE_ID);
         Movies movie = null;
         try {
-            movie = moviesDao.getMovieByTitleId(title_id);
+            movie = moviesDao.getMovieByTitleId(title_id,"");
         } catch (SQLException e) {
             e.printStackTrace();
         }

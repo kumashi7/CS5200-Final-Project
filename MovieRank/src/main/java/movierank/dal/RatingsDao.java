@@ -94,17 +94,28 @@ public class RatingsDao {
         return ratings;
     }
 
-    public List<Ratings> getRatingsByAverageRating(Double averageRating) throws SQLException{
+    public List<Ratings> getRatingsByAverageRating(String averageRating,String type,String year) throws SQLException{
     	List<Ratings> ratings = new ArrayList<Ratings>();
-        String selectRating = "SELECT title_id, average_rating, num_votes FROM Ratings WHERE average_rating>=?;";
+    	StringBuffer stringBuffer = new StringBuffer();
+    	stringBuffer.append("select * FROM ratings A INNER JOIN (select title_id from moviegenres  ");
+    	if(!("".equals(type)||null == type)) {
+    		stringBuffer.append("WHERE genre = '");
+    		stringBuffer.append(type);
+    		stringBuffer.append("'");
+    	}
+    	stringBuffer.append("  GROUP BY title_id )   B on A.title_id = B.title_id");
+    	if(!(averageRating != null)) {
+    		stringBuffer.append(" WHERE A.average_rating>= '");
+    		stringBuffer.append(averageRating);
+    		stringBuffer.append("'");
+    	}
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
-
         try {
             connection = connectionManager.getConnection();
-            selectStmt = connection.prepareStatement(selectRating);
-            selectStmt.setDouble(1, averageRating);
+       
+            selectStmt = connection.prepareStatement(stringBuffer.toString());
             results = selectStmt.executeQuery();
             MoviesDao moviesDao = MoviesDao.getInstance();
 
@@ -112,8 +123,7 @@ public class RatingsDao {
                 String titleId = results.getString("title_id");
                 Double resultAverageRating = results.getDouble("average_rating");
                 int numVotes = results.getInt("num_votes");
-                Movies movie = moviesDao.getMovieByTitleId(titleId);
-                Ratings rating = new Ratings(titleId, resultAverageRating, numVotes, movie);
+                Ratings rating = new Ratings(titleId, resultAverageRating, numVotes, null);
                 ratings.add(rating);
             }
         } catch (SQLException e) {
