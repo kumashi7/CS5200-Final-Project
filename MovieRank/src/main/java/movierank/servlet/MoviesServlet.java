@@ -85,6 +85,41 @@ public class MoviesServlet extends HttpServlet {
         req.setAttribute(Constants.MOVIE, movies);
         req.getRequestDispatcher(Constants.INDEX_PAGE).forward(req, resp);
     }
+    
+    private void doGetByRatingAndVotes(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+    	// Map for storing messages.
+        Map<String, String> messages = new HashMap<String, String>();
+        req.setAttribute("messages", messages);
+    	
+        // Retrieve and validate ratings & votes
+        String average_rating = req.getParameter(Constants.AVERAGE_RATING);
+        String num_votes = req.getParameter(Constants.NUM_VOTES);
+        
+        if (average_rating == null) {
+        	messages.put("average_rating", "Invalid average rating. Please enter a number between 0.0 and 10.0");
+        } else {
+        	messages.put("average_rating", "Average rating: " + average_rating);
+        }
+        
+        if (num_votes == null) {
+        	messages.put("num_votes", "Invalid number of votes. Please enter a number");
+        } else {
+        	messages.put("num_votes", "Number of votes: " + num_votes);
+        }
+        
+        // Retrieve Ratings and Movies
+        List<Ratings> ratings = new ArrayList<Ratings>();
+        try {
+        	ratings = ratingsDao.getRatingsByRatingsAndVotes(Double.valueOf(average_rating), Integer.valueOf(num_votes));
+        } catch (SQLException e) {
+			e.printStackTrace();
+			throw new IOException(e);
+        }
+        
+        req.setAttribute("ratings", ratings);
+        req.getRequestDispatcher(Constants.INDEX_PAGE).forward(req, resp);
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -92,6 +127,8 @@ public class MoviesServlet extends HttpServlet {
         String avgRating = req.getParameter(Constants.AVG_RATING);
         String title = req.getParameter(Constants.TITLE);
         String person = req.getParameter(Constants.PERSON);
+        String average_rating = req.getParameter(Constants.AVERAGE_RATING);
+        String num_votes = req.getParameter(Constants.NUM_VOTES);
         if(avgRating != null && avgRating.length() > 0)  {
             prevRating = avgRating;
             prevReq = req;
@@ -105,6 +142,10 @@ public class MoviesServlet extends HttpServlet {
             prevReq = req;
             prevResp = resp;
             doGetByPerson(req, resp);
+        } else if (average_rating != null && average_rating.length() > 0 && num_votes != null && num_votes.length() > 0) {
+        	prevReq = req;
+            prevResp = resp;
+            doGetByRatingAndVotes(req, resp);
         }
     }
 

@@ -143,6 +143,92 @@ public class RatingsDao {
 
         return ratings;
     }
+    
+    /* 
+     * get Objects by votes & average ratings
+     */
+    public List<Ratings> getRatingsByNumOfVotes(Integer numOfVotes) throws SQLException{
+    	List<Ratings> ratings = new ArrayList<Ratings>();
+    	String selectRating = "SELECT title_id, average_rating, num_votes FROM Ratings WHERE num_votes>=?;";
+    	Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(selectRating);
+            selectStmt.setInt(1, numOfVotes);
+            results = selectStmt.executeQuery();
+            MoviesDao moviesDao = MoviesDao.getInstance();
+
+            while(results.next()) {
+                String titleId = results.getString("title_id");
+                Double resultAverageRating = results.getDouble("average_rating");
+                int numVotes = results.getInt("num_votes");
+                Movies movie = moviesDao.getMovieByTitleId(titleId);
+                Ratings rating = new Ratings(titleId, resultAverageRating, numVotes, movie);
+                ratings.add(rating);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if(connection != null) {
+                connection.close();
+            }
+            if(selectStmt != null) {
+                selectStmt.close();
+            }
+            if(results != null) {
+                results.close();
+            }
+        }
+        return ratings;
+    }
+    
+    
+    /*
+     * Functions needed for search movies by ratings and votes
+     */
+    public List<Ratings> getRatingsByRatingsAndVotes(Double averageRating, Integer numOfVotes) throws SQLException{
+    	List<Ratings> ratings = new ArrayList<Ratings>();
+    	String selectRating = "SELECT title_id, average_rating, num_votes FROM Ratings WHERE num_votes>=? AND num_votes>=?;";
+    	Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(selectRating);
+            selectStmt.setDouble(1, averageRating);
+            selectStmt.setInt(2, numOfVotes);
+            results = selectStmt.executeQuery();
+            MoviesDao moviesDao = MoviesDao.getInstance();
+
+            while(results.next()) {
+                String titleId = results.getString("title_id");
+                Double resultAverageRating = results.getDouble("average_rating");
+                int numVotes = results.getInt("num_votes");
+                Movies movie = moviesDao.getMovieByTitleId(titleId);
+                Ratings rating = new Ratings(titleId, resultAverageRating, numVotes, movie);
+                ratings.add(rating);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if(connection != null) {
+                connection.close();
+            }
+            if(selectStmt != null) {
+                selectStmt.close();
+            }
+            if(results != null) {
+                results.close();
+            }
+        }
+        return ratings;
+    }
 
     public Ratings updateNumVotes(Ratings rating, int numVotes) throws SQLException{
         String updateRating = "UPDATE Ratings SET num_votes=? WHERE title_id=? AND average_rating=? AND num_votes=?;";

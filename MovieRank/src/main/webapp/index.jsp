@@ -60,7 +60,41 @@
 	        <br/><br/><br/>
 	        <span id="successMessage"><b>${Message.Success}</b></span>
 	    </p>
+<!-- 	=========================================
+	          Search by Ratings and Votes
+	    =========================================   -->
 	</form>
+		<form action="movies" method="get">
+		<h2>Search for a Movie by Average Ratings and Number of Votes</h2>
+		<p>
+			<label for="average_rating">Rating</label>
+			<input id="average_rating" name="average_rating" value="${fn:escapeXml(param.average_rating)}">
+			<label for="num_votes">Number of Votes</label>
+			<input id="num_votes" name="num_votes" value="${fn:escapeXml(param.num_votes)}">
+		</p>
+		<p>
+			<input type="submit">
+			<br/><br/><br/>
+			<span id="successMessage"><b>${messages.success}</b></span>
+		</p>
+	</form>
+	<h2>Movies above ${messages.average_rating} and have more than ${messages.num_votes}</h2>
+		<table border="1">
+            <tr>
+                <th>TitleId</th>
+                <th>Movie Name</th>
+                <th>Average Rating</th>
+                <th>Number Of Votes</th>
+            </tr>
+            <c:forEach items="${ratings}" var="ratings" >
+                <tr>
+                    <td><c:out value="${ratings.getTitleId()}" /></td>
+                    <td><c:out value="${ratings.getMovie().getPrimary_title()}" /></td>
+                    <td><c:out value="${ratings.getAverageRating()}" /></td>
+                    <td><c:out value="${ratings.getNumVotes()}" /></td>
+                </tr>
+            </c:forEach>
+       </table>
 	<form action="movies" method="post">
 	 	<h2>Add new movie</h2>
 	    <div>

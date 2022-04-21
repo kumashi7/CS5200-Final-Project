@@ -28,4 +28,6 @@ public interface Constants {
     String FAILED = " failed for ";
     String _REVIEW = "_Review";
     String PREVIEW_RATING = "prevRating";
+    String TITLE = "title";
+    String PERSON = "person";
 }
