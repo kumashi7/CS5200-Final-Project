@@ -97,7 +97,7 @@ public class RatingsDao {
     public List<Ratings> getRatingsByAverageRating(String averageRating,String type,String year) throws SQLException{
     	List<Ratings> ratings = new ArrayList<Ratings>();
     	StringBuffer stringBuffer = new StringBuffer();
-    	stringBuffer.append("select * FROM ratings A INNER JOIN (select title_id from moviegenres  ");
+    	stringBuffer.append("select * FROM ratings A INNER JOIN (select * from moviegenres  ");
     	if(!("".equals(type)||null == type)) {
     		stringBuffer.append("WHERE genre = '");
     		stringBuffer.append(type);
@@ -122,8 +122,9 @@ public class RatingsDao {
             while(results.next()) {
                 String titleId = results.getString("title_id");
                 Double resultAverageRating = results.getDouble("average_rating");
+                String genre = results.getString("genre");
                 int numVotes = results.getInt("num_votes");
-                Ratings rating = new Ratings(titleId, resultAverageRating, numVotes, null);
+                Ratings rating = new Ratings(titleId, resultAverageRating, numVotes, new Movies("", genre));
                 ratings.add(rating);
             }
         } catch (SQLException e) {
@@ -192,7 +193,7 @@ public class RatingsDao {
      */
     public List<Ratings> getRatingsByRatingsAndVotes(Double averageRating, Integer numOfVotes) throws SQLException{
     	List<Ratings> ratings = new ArrayList<Ratings>();
-    	String selectRating = "SELECT title_id, average_rating, num_votes FROM Ratings WHERE num_votes>=? AND num_votes>=?;";
+    	String selectRating = "SELECT title_id, average_rating, num_votes FROM Ratings WHERE average_rating>=? AND num_votes>=?;";
     	Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
