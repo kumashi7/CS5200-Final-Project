@@ -49,6 +49,7 @@
         <tr>
             <th>TitleID</th>
             <th>PrimaryTitle</th>
+            <th>PersonName</th>
             <th>StartYear</th>
             <th>EndYear</th>
             <th>Update End Year</th>
@@ -58,6 +59,7 @@
             <tr>
                 <td><c:out value="${movie.getTitle_id()}" /></td>
                 <td><c:out value="${movie.getPrimary_title()}" /></td>
+                <td><c:out value="${movie.getPersonName()}" /></td>
                 <td><c:out value="${movie.getStart_year()}" /></td>
                 <td><c:out value="${movie.getEnd_year()}" /></td>
 <%--                <td><fmt:formatDate value="${blogUser.getDob()}" pattern="yyyy-MM-dd"/></td>--%>

@@ -134,7 +134,7 @@ public class MoviesDao {
 	}
 	
 	public List<Movies> getMovieByPersonName(String person) throws SQLException {
-		String selectMovies = "SELECT movies.title_id, primary_title, title_type, original_title, is_Adult, start_year, end_year, runtime_minutes FROM movies\r\n"
+		String selectMovies = "SELECT movies.title_id, primary_title, name_, title_type, original_title, is_Adult, start_year, end_year, runtime_minutes FROM movies\r\n"
 				+ "LEFT OUTER JOIN principals ON movies.title_id = principals.title_id\r\n"
 				+ "LEFT OUTER JOIN persons ON principals.name_id = persons.name_id\r\n"
 				+ "WHERE persons.name_ LIKE ?;";
@@ -150,13 +150,16 @@ public class MoviesDao {
 			while(results.next()) {
 				String resultMovieId = results.getString("title_id");
 				String primaryTitle = results.getString("primary_title");
+				String personName = results.getString("name_");
 				String titleType = results.getString("title_type");
 				String originalType = results.getString("original_title");
+				
 				boolean isAdult = results.getBoolean("is_Adult");
 				int startYear = results.getInt("start_year");
 				int endYear = results.getInt("end_year");
 				int runtimeMinutes = results.getInt("runtime_minutes");
 				Movies movie = new Movies(resultMovieId, primaryTitle, titleType, originalType, isAdult, startYear, endYear, runtimeMinutes);
+				movie.setPersonName(personName);
 				ret.add(movie);
 			}
 		} catch (SQLException e) {

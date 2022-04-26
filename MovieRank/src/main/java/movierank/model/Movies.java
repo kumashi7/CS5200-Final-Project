@@ -10,6 +10,7 @@ public class Movies {
 	protected int end_year;
 	protected int runtime_minutes;
 	protected String genre;
+	protected String personName;
 	
 	public Movies(String title_id, String primary_title, String title_type,  String original_title, boolean is_Adult, int start_year, int end_year,int runtime_minutes) {
 		this.title_id = title_id;
@@ -76,6 +77,10 @@ public class Movies {
 	public void setGenre(String genre) {
 		this.genre = genre;
 	}
+	
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
 
 	public boolean is_Adult() {
 		return is_Adult;
@@ -99,6 +104,10 @@ public class Movies {
 	
 	public String getGenre() {
 		return this.genre;
+	}
+	
+	public String getPersonName() {
+		return this.personName;
 	}
 
 	public void setEnd_year(int end_year) {
