@@ -14,19 +14,7 @@ nav {
 	color: #556C76;
 }
 
-.input1 {
-	float: left;
-	width: 45%;
-}
-
-.input2 {
-	padding-left: 10%;
-	float: left;
-	width: 45%;
-}
-
 input[type=submit] {
-	width: 100%;
 	background-color: CornflowerBlue;
 	color: white;
 	padding: 14px 20px;
@@ -41,7 +29,6 @@ input[type=submit]:hover {
 }
 
 input[type=text], select {
-  width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
@@ -56,11 +43,5 @@ table {
     margin: 25px 0;
     font-size: 0.9em;
     font-family: sans-serif;
-    min-width: 400px;
-    width: 100%;
     box-shadow: 0 0 20px #012439;
-}
-
-tr:hover {
-	background-color: CornflowerBlue;
 }

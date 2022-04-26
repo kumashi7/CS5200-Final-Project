@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<style><%@include file="/WEB-INF/css/ryg_style.css"%></style>
 <html>
 <head>
     <title>MovieRank</title>
@@ -28,16 +29,31 @@
 </head>
 <body>
 	<nav>
-	<a href="/index.jsp">Back to home</a>
+	<a href="./index.jsp">Back to home</a>
 	</nav>
+	<div class="intro">
+	"I wanna watch a great old comedy."
+	</div>
 	<form action="movies" method="get">
-	    <h2>Search movies by Rating/Year/Genre:</h2>
+<%-- 	<h2>Search movies by Rating/Year/Genre:</h2>																																						   --%>
+		<div class="input1">
 	    <p>
 	        <label for="avgRating">Rating</label>
-	        <input id="avgRating" name="avgRating" value="${fn:escapeXml(param.avgRating)}"></input>
-	         Year：<input type="text" name="year" value="${fn:escapeXml(param.year)}"></input>
-	    	 Genre：<input type="text" name="type" value="${fn:escapeXml(param.type)}"></input>
+	        <input type="text" id="avgRating" name="avgRating" value="${fn:escapeXml(param.avgRating)}"></input>
+        </p>
+	    </div>
+		<div class="input2">
+		<p>
+	         <label for="year">Year</label>
+	         <input type="text" id="year" name="year" value="${fn:escapeXml(param.year)}"></input>
 	    </p>
+	    </div>
+   		<div class="input3">
+   		<p>
+	         <label for="type">Type</label>
+	    	 <input type="text" id="type" name="type" value="${fn:escapeXml(param.type)}"></input>
+	    </p>
+	    </div>
 	    <p>
 	        <input type="submit">
 	        <br/><br/><br/>

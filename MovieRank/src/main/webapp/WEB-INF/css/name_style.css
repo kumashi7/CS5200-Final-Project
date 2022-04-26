@@ -14,13 +14,7 @@ nav {
 	color: #556C76;
 }
 
-.input1 {
-	float: left;
-	width: 45%;
-}
-
-.input2 {
-	padding-left: 10%;
+.input {
 	float: left;
 	width: 45%;
 }

@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<style><%@include file="/WEB-INF/css/addreview_style.css"%></style>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -29,10 +30,12 @@
 </head>
 <body>
 	<nav>
-	<a href="/index.jsp">Back to home</a>
+	<a href="./index.jsp">Back to home</a>
 	</nav>
+	<div class="intro">
+	"I wanna add my review to the database."
+	</div>
 	<form action="reviews" method="post">
-		<h2>Add new Review</h2>
 	    <div>
 	        <input type="button" id="createReviewBtn" value="Add Review" onclick="createReview()">
 	        <table border="1" id = "createReviewTable" style="display: none">

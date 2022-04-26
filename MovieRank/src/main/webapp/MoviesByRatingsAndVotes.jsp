@@ -15,7 +15,7 @@ function showResult(){
 </head>
 <body>
 	<nav>
-	<a href="/index.jsp">Back to home</a>
+	<a href="./index.jsp">Back to home</a>
 	</nav>
 	<div class="intro">
 	"I wanna watch a good movie that is also popular."

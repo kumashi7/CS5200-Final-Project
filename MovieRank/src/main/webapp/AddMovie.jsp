@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<style><%@include file="/WEB-INF/css/addmovie_style.css"%></style>
 <html>
 <head>
     <title>Movie Rank by Group 2</title>
@@ -28,10 +29,12 @@
 </head>
 <body>
 	<nav>
-	<a href="/index.jsp">Back to home</a>
+	<a href="./index.jsp">Back to home</a>
 	</nav>
+	<div class="intro">
+	"I wanna add a movie that is missing is the database."
+	</div>
 	<form action="movies" method="post">
-	 	<h2>Add new movie</h2>
 	    <div>
 	        <input type="button" id="createMovieBtn" value="Create Movie" onclick="createMovie()">
 	        <table border="1" id = "createMovieTable" style="display: none">

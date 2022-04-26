@@ -16,13 +16,19 @@ nav {
 
 .input1 {
 	float: left;
-	width: 45%;
+	width: 30%;
 }
 
 .input2 {
-	padding-left: 10%;
+	padding-left: 5%;
 	float: left;
-	width: 45%;
+	width: 30%;
+}
+
+.input3 {
+	padding-left: 5%;
+	float: left;
+	width: 30%;
 }
 
 input[type=submit] {

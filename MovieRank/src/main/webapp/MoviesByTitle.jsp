@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<style><%@include file="/WEB-INF/css/title_style.css"%></style>
 <html>
 <head>
     <title>Movie Rank by Group 2</title>
@@ -28,14 +29,19 @@
 </head>
 <body>
 	<nav>
-	<a href="/index.jsp">Back to home</a>
+	<a href="./index.jsp">Back to home</a>
 	</nav>
+	<div class="intro">
+	"I wanna watch 007 today."
+	</div>
 	<form action="title" method="get">
-	    <h2>Search for Movies by Title</h2>
+<%--    <h2>Search for Movies by Title</h2>                                                           																										    --%>
+	    <div class="input">	    
 	    <p>
 	        <label for="title">Title</label>
-	        <input id="title" name="title" value="${fn:escapeXml(param.title)}"></input>
+	        <input type="text" id="title" name="title" value="${fn:escapeXml(param.title)}"></input>
 	    </p>
+	    </div>
 	    <p>
 	        <input type="submit">
 	    </p>
