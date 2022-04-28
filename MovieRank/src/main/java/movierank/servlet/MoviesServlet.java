@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet("/movies")
 public class MoviesServlet extends HttpServlet {
@@ -32,26 +33,41 @@ public class MoviesServlet extends HttpServlet {
         System.out.println(Constants.SQL_CONNECT_SUCCESS);
     }
 
-    private void doGetOnAverageRating(HttpServletRequest req, HttpServletResponse resp, String avgRating) throws ServletException, IOException {
+    private void doGetOnAverageRating(HttpServletRequest req, HttpServletResponse resp,String avgRating) throws ServletException, IOException {
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute(Constants.MESSAGE, messages);
         List<Movies> movies = new ArrayList<>();
+       
         String year= req.getParameter("year");
         String type=req.getParameter("type");
         try {
-        	if(avgRating.equals("")||avgRating==null) {
-        		avgRating=null;
-        	}
-            List<Ratings> ratings = ratingsDao.getRatingsByAverageRating(avgRating,type,year);
-            for(Ratings rating : ratings) {
-
-                Movies movie = moviesDao.getMovieByTitleId(rating.getTitleId(),year);
-
-                if(movie!=null) {
-                    movie.setGenre(rating.getMovie().getGenre());
-                	movies.add(movie);
-                }
-            }
+        	movies = moviesDao.getMovieBy_titleId_year_type(avgRating, year, type);
+        	movies.parallelStream().map(mo -> {
+        		try {
+        			mo.setGenre(moviesDao.getGenreByTitleId(mo.getTitle_id()));
+        		} catch (SQLException e) {
+        			e.printStackTrace();
+        		}
+        		return mo;
+        	}).collect(Collectors.toList());
+//        	if("".equals(avgRating)||avgRating==null) {
+//        		avgRating=null;
+//        	}
+//            List<Ratings> ratings = ratingsDao.getRatingsByAverageRating(avgRating,type,year);
+//           
+//            for(Ratings rating : ratings) {
+//
+//                Movies movie = moviesDao.getMovieByTitleId(rating.getTitleId(),year);
+//
+//                if(movie!=null) {
+//                	
+//            		 System.out.println(movie.getGenre());
+//            		
+//                	
+//                    //
+//                	movies.add(movie);
+//                }
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,9 +80,10 @@ public class MoviesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doGet(req, resp);
         String avgRating = req.getParameter(Constants.AVG_RATING);
-        if(avgRating != null && avgRating.length() > 0)  {
-            doGetOnAverageRating(req, resp, avgRating);
-        }
+        doGetOnAverageRating(req, resp, avgRating);
+//        if(avgRating != null && avgRating.length() > 0)  {
+//            
+//        }
     }
 
     private void doPostOnUpdateEndYear(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

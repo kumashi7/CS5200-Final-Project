@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 import movierank.model.*;
 import movierank.utils.ConnectionManager;
@@ -180,7 +181,7 @@ public class MoviesDao {
 	}
 	
 	public Movies getMovieByTitleId(String title_id,String year) throws SQLException {
-		String selectMovies = "SELECT title_id, primary_title, title_type, original_title, is_Adult, start_year, end_year, runtime_minutes FROM Movies WHERE title_id=?";
+		String selectMovies = "SELECT title_id, primary_title, title_type, original_title, is_Adult, start_year, end_year, runtime_minutes FROM  Movies WHERE title_id=?";
 		if(!("".equals(year)|| null==year)) {
 			selectMovies+="and start_year = "+year;
 		}
@@ -223,6 +224,110 @@ public class MoviesDao {
 		}
 		return movie;
 	}
+	
+	public List<Movies> getMovieBy_titleId_year_type(String averageRating,String year, String type)  throws SQLException {
+		List<Movies> movies = new ArrayList<Movies>();
+		
+		StringBuffer selectMovies = new StringBuffer("Select mo.title_id ,mo.primary_title, mo.title_type, mo.original_title, mo.is_Adult, mo.start_year, mo.end_year, mo.runtime_minutes FROM ratings ra join movies mo on ra.title_id = mo.title_id ");
+		if (type != null && !"".equals(type)) {
+			selectMovies.append(" join moviegenres mg on mo.title_id=mg.title_id ");
+		}
+		selectMovies.append(" where 1=1");
+		if (averageRating != null && !"".equals(averageRating)) {
+			selectMovies.append(" and ra.average_rating >= '")
+			.append(averageRating)
+			.append("'");
+		}
+		
+		if (year != null && !"".equals(year)) {
+			selectMovies.append(" and mo.start_year = '")
+			.append(year)
+			.append("'");
+		}
+		
+		if (type != null && !"".equals(type)) {
+			selectMovies.append(" and mg.genre = '")
+			.append(type)
+			.append("'");
+		}
+		selectMovies.append(";");
+		
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		Movies movie = null;
+		try {
+		
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectMovies.toString());
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				String resultMovieId = results.getString("title_id");
+	
+				String primaryTitle = results.getString("primary_title");
+				String titleType = results.getString("title_type");
+				String originalType = results.getString("original_title");
+				boolean isAdult = results.getBoolean("is_Adult");
+				int startYear = results.getInt("start_year");
+				int endYear = results.getInt("end_year");
+				int runtimeMinutes = results.getInt("runtime_minutes");
+				
+				movie = new Movies(resultMovieId, primaryTitle, titleType, originalType, isAdult, startYear, endYear, runtimeMinutes);
+				movies.add(movie);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return movies;
+	}
+
+	
+	public String getGenreByTitleId(String titleId) throws SQLException {
+		String sql = "select * from moviegenres where title_id = ?";
+		StringJoiner joiner = new StringJoiner(",");
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		Movies movie = null;
+		try {
+		
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(sql);
+			selectStmt.setString(1, titleId);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				String genre = results.getString("genre");
+				joiner.add(genre);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		
+		return joiner.toString();
+	}
+	
 	public Movies updateMovieEndyear(Movies movie, int newEndYear) throws SQLException {
 		String updateMovie = "UPDATE Movies SET end_year=? WHERE title_id=?;";
 		Connection connection = null;

@@ -97,14 +97,14 @@ public class RatingsDao {
     public List<Ratings> getRatingsByAverageRating(String averageRating,String type,String year) throws SQLException{
     	List<Ratings> ratings = new ArrayList<Ratings>();
     	StringBuffer stringBuffer = new StringBuffer();
-    	stringBuffer.append("select * FROM ratings A INNER JOIN (select * from moviegenres  ");
+    	stringBuffer.append("select * FROM ratings A INNER JOIN (select title_id from moviegenres  ");
     	if(!("".equals(type)||null == type)) {
     		stringBuffer.append("WHERE genre = '");
     		stringBuffer.append(type);
     		stringBuffer.append("'");
     	}
     	stringBuffer.append("  GROUP BY title_id )   B on A.title_id = B.title_id");
-    	if((averageRating != null)) {
+    	if(averageRating != null) {
     		stringBuffer.append(" WHERE A.average_rating>= '");
     		stringBuffer.append(averageRating);
     		stringBuffer.append("'");
@@ -122,9 +122,9 @@ public class RatingsDao {
             while(results.next()) {
                 String titleId = results.getString("title_id");
                 Double resultAverageRating = results.getDouble("average_rating");
-                String genre = results.getString("genre");
+                //String genre = results.getString("genre");
                 int numVotes = results.getInt("num_votes");
-                Ratings rating = new Ratings(titleId, resultAverageRating, numVotes, new Movies("", genre));
+                Ratings rating = new Ratings(titleId, resultAverageRating, numVotes, null);
                 ratings.add(rating);
             }
         } catch (SQLException e) {

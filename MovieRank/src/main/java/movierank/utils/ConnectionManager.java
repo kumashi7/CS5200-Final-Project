@@ -42,7 +42,8 @@ public class ConnectionManager {
 	private final int port= 3306;
 	// this may should be changed
 	//private final String schema = "MovieRank";
-	private final String schema = "movierank";
+	private final String schema = "movieRank";
+	//private final String schema = "test";
 	private final String timezone = "UTC";
 
 	/** Get the connection to the database instance. */
