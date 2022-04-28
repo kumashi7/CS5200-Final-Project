@@ -13,7 +13,6 @@
 	<p class="intro">Search or modify movies database by.....</p>
 	<nav>
 	<a href="./AddMovie.jsp">Add Movies</a> |
-	<a href="./AddReview.jsp">Add Review</a> |
 	<a href="./MoviesByRYG.jsp">Search movies by Ratings/Year/Genre</a> |
 	<a href="./MoviesByTitle.jsp">Search movies by Title</a> |
 	<a href="./MoviesByName.jsp">Search movies by Person's name</a> |

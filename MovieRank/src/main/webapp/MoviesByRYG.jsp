@@ -55,7 +55,7 @@
 	    </p>
 	    </div>
 	    <p>
-	        <input type="submit">
+	        <input class="submit" type="submit">
 	        <br/><br/><br/>
 	        <span id="successMessage"><b>${Message.Success}</b></span>
 	    </p>
@@ -83,12 +83,12 @@
 <%--                <td><a href="movies?update_end_year=true&title_id=<c:out value="${movie.getTitle_id()}"/>">Update End Year</a></td>--%>
 <%--                <td><a href="blogcomments?username=<c:out value="${blogUser.getUserName()}"/>">BlogComments</a></td>--%>
                 <td>
-                    <input type="button" id="updateBtn${movie.getTitle_id()}" value="Update" onclick="showForm('${movie.getTitle_id()}')">
+                    <input class="update" type="button" id="updateBtn${movie.getTitle_id()}" value="Update" onclick="showForm('${movie.getTitle_id()}')">
                     <form action="movies" method="post">
                         <p id="postUpdateEndYear${movie.getTitle_id()}" style="display: none;">
                             <label for="newEndYear">New End Year</label>
                             <input id="newEndYear" name="newEndYear" value="${fn:escapeXml(param.newEndYear)}">
-                            <input type="submit" value = "Update">
+                            <input class="doUpdate" type="submit" value = "Update">
                             <input type="hidden" name = "update_end_year" value = "true">
                             <input type="hidden" name = "title_id" value = ${movie.getTitle_id()}>
                         </p>
@@ -96,7 +96,7 @@
                 </td>
                 <td>
 
-                    <input type="button" onclick="deleteConfirm('${movie.getTitle_id()}')" value = "Delete">
+                    <input class="delete" type="button" onclick="deleteConfirm('${movie.getTitle_id()}')" value = "Delete">
                     <form action="movies" method="post">
                         <p id="postDelete" style="display: none;">
                             <input type="hidden" name = "delete" value = "true">

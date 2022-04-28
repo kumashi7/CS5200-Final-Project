@@ -31,7 +31,36 @@ nav {
 	width: 30%;
 }
 
-input[type=submit] {
+.update {
+	background-color: CornflowerBlue;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.doUpdate {
+	background-color: CornflowerBlue;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.doUpdate:hover {
+	background-color: RoyalBlue;
+	color: white;
+}
+
+.delete {
+	background-color: CornflowerBlue;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.submit {
 	width: 100%;
 	background-color: CornflowerBlue;
 	color: white;
@@ -42,7 +71,7 @@ input[type=submit] {
 	cursor: pointer;
 }
 
-input[type=submit]:hover {
+.submit:hover {
   background-color: RoyalBlue;
 }
 
@@ -68,5 +97,5 @@ table {
 }
 
 tr:hover {
-	background-color: CornflowerBlue;
+	background-color: #DAF3FF;
 }

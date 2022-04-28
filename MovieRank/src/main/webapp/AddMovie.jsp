@@ -36,7 +36,7 @@
 	</div>
 	<form action="movies" method="post">
 	    <div>
-	        <input type="button" id="createMovieBtn" value="Create Movie" onclick="createMovie()">
+	        <input class="create" type="button" id="createMovieBtn" value="Create Movie" onclick="createMovie()">
 	        <table border="1" id = "createMovieTable" style="display: none">
 	            <tr>
 	                <th>TitleId</th>
